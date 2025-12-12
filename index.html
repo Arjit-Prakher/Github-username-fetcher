@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>GitHub Finder — Dark UI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      /* small extra polish */
+      .glass {
+        background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
+        backdrop-filter: blur(6px);
+      }
+    </style>
+  </head>
+  <body class="min-h-screen bg-gray-900 text-gray-100 antialiased">
+    <div class="min-h-screen flex items-center justify-center p-6 lg:p-12">
+      <div class="w-full max-w-4xl">
+        <header class="flex items-center justify-between mb-8">
+          <div class="flex items-center gap-4">
+            <div class="w-12 h-12 rounded-xl flex items-center justify-center bg-gradient-to-br from-indigo-600 to-pink-500 shadow-lg">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 2L12 12L22 12"/></svg>
+            </div>
+            <div>
+              <h1 class="text-xl font-semibold">GitHub Finder</h1>
+              <p class="text-sm text-gray-400">Enter a username to locate the GitHub account</p>
+            </div>
+          </div>
+          <nav class="hidden md:flex gap-4 items-center text-sm text-gray-400">
+            <a class="px-3 py-2 hover:text-gray-200" href="#">Docs</a>
+            <a class="px-3 py-2 hover:text-gray-200" href="#">About</a>
+            <a class="px-3 py-2 rounded-md bg-gradient-to-br from-indigo-600 to-pink-500 text-white shadow" href="#">New Project</a>
+          </nav>
+        </header>
+
+        <main class="glass rounded-2xl p-6 lg:p-10 shadow-2xl border border-gray-800">
+          <form id="searchForm" class="grid grid-cols-1 lg:grid-cols-3 gap-4 items-center mb-6">
+            <div class="lg:col-span-2">
+              <label for="username" class="text-sm text-gray-300 mb-2 block">GitHub username</label>
+              <div class="flex items-center gap-3">
+                <input id="username" name="username" type="text" placeholder="e.g. torvalds" autocomplete="off"
+                  class="w-full rounded-lg border border-gray-800 bg-transparent px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+                <button id="searchBtn" class="inline-flex items-center gap-2 rounded-lg px-4 py-3 bg-indigo-600 hover:brightness-110 text-white shadow">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z"/></svg>
+                  Search
+                </button>
+              </div>
+              <p id="hint" class="text-xs text-gray-500 mt-2">Tip: You can paste a full profile URL, or just the username.</p>
+            </div>
+
+            <div class="flex items-center justify-end">
+              <div class="text-right text-sm text-gray-400">
+                <div>Practice your JavaScript</div>
+                <div class="text-xs text-gray-500 mt-1">This UI provides DOM targets and a small stub where you can write your logic.</div>
+              </div>
+            </div>
+          </form>
+
+          <!-- Results area: your code should update the content inside #resultCard and toggle #emptyState as needed -->
+          <section id="results" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div id="resultCard" class="hidden lg:block col-span-1 rounded-xl border border-gray-800 p-4 glass">
+              <div class="flex flex-col items-center text-center gap-3">
+                <img id="avatar" alt="avatar" class="w-28 h-28 rounded-full ring-2 ring-gray-800" src="" />
+                <div>
+                  <h2 id="displayName" class="text-lg font-semibold">—</h2>
+                  <p id="handle" class="text-sm text-gray-400">@—</p>
+                </div>
+                <a id="profileLink" class="text-sm text-indigo-400 underline" href="#" target="_blank" rel="noopener">View on GitHub</a>
+
+                <div class="w-full mt-3 text-left">
+                  <p id="bio" class="text-sm text-gray-300">No bio</p>
+                  <div class="mt-4 grid grid-cols-3 gap-2 text-sm text-gray-400">
+                    <div class="p-2 bg-gray-800 rounded-lg">
+                      <div class="font-semibold text-gray-100" id="reposCount">—</div>
+                      <div class="text-xs">Repos</div>
+                    </div>
+                    <div class="p-2 bg-gray-800 rounded-lg">
+                      <div class="font-semibold text-gray-100" id="followersCount">—</div>
+                      <div class="text-xs">Followers</div>
+                    </div>
+                    <div class="p-2 bg-gray-800 rounded-lg">
+                      <div class="font-semibold text-gray-100" id="followingCount">—</div>
+                      <div class="text-xs">Following</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div id="emptyState" class="col-span-2 rounded-xl border border-dashed border-gray-800 p-6 flex flex-col justify-center items-start gap-4">
+              <h3 class="text-xl font-semibold">No results yet</h3>
+              <p class="text-gray-400">Type a username and press <strong>Search</strong> (or Enter). Your JavaScript should call the GitHub API and populate the card on success.</p>
+
+              <details class="mt-4 text-sm text-gray-400">
+                <summary class="cursor-pointer">Quick implementation notes</summary>
+                <ul class="mt-2 list-disc list-inside text-gray-400">
+                  <li>Use <code>fetch('https://api.github.com/users/&lt;username&gt;')</code> to get public profile data.</li>
+                  <li>Handle 404s (user not found) and rate limits gracefully.</li>
+                  <li>Update DOM elements: <code>#avatar</code>, <code>#displayName</code>, <code>#handle</code>, etc.</li>
+                </ul>
+              </details>
+            </div>
+          </section>
+
+        </main>
+
+        <footer class="mt-6 text-center text-sm text-gray-500">Built for practicing JavaScript • Dark, modern UI • Tailwind CDN</footer>
+      </div>
+    </div>
+
+    <script>
+      // --- Wiring for UI only. Replace the body of `searchGitHub` with your own logic. ---
+      const form = document.getElementById('searchForm');
+      const usernameInput = document.getElementById('username');
+      const resultCard = document.getElementById('resultCard');
+      const emptyState = document.getElementById('emptyState');
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const raw = usernameInput.value.trim();
+        if (!raw) return;
+        // Call your function here. Implement fetch/logic yourself.
+        searchGitHub(raw);
+      });
+
+      // TODO: implement this function with your own JavaScript.
+      // Expected behaviour:
+      //  - Accept either a username or a full GitHub profile URL.
+      //  - Fetch profile data from the GitHub API.
+      //  - If found: populate the DOM nodes below and show #resultCard, hide #emptyState.
+      //  - If not found: show a friendly error (you can reuse #emptyState or create your own element).
+      async function searchGitHub(query) {
+        // Example placeholder behaviour: this will simply show the card with demo values.
+        // Replace everything below with your own implementation.
+
+        // Normalize (you might want to parse URLs here in your own version):
+        const username = query.replace(/https?:\/\/(www\.)?github\.com\//i, '').replace(/\/.*/, '');
+
+        // Show loading state briefly
+        emptyState.classList.add('opacity-50');
+        usernameInput.disabled = true;
+
+        // Demo delay (remove when implementing real fetch)
+        await new Promise(r => setTimeout(r, 600));
+
+        // Populate demo content (replace with real API response)
+        document.getElementById('avatar').src = 'https://avatars.githubusercontent.com/u/9919?v=4';
+        document.getElementById('displayName').textContent = 'GitHub Demo';
+        document.getElementById('handle').textContent = '@' + username;
+        document.getElementById('profileLink').href = 'https://github.com/' + username;
+        document.getElementById('bio').textContent = 'Replace this demo content by fetching https://api.github.com/users/' + username + ' and updating the DOM.';
+        document.getElementById('reposCount').textContent = '—';
+        document.getElementById('followersCount').textContent = '—';
+        document.getElementById('followingCount').textContent = '—';
+
+        // Show card / hide empty state
+        resultCard.classList.remove('hidden');
+        emptyState.classList.add('hidden');
+
+        emptyState.classList.remove('opacity-50');
+        usernameInput.disabled = false;
+      }
+
+      // Optional: allow pressing Enter in the input to submit
+      usernameInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') form.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
+      });
+    </script>
+  </body>
+</html>
