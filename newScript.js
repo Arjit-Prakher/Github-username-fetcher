@@ -1,7 +1,7 @@
 let userNameInputTag = document.querySelector('#username');
 let searchBtn = document.getElementById('searchBtn');
 let resultCard = document.getElementById('resultCard');
-
+let repoUL = document.getElementById('repoUL');
 
 function decorateUI(data) {
     let DOMui = `<div class="flex flex-col items-center text-center gap-3">
@@ -65,13 +65,15 @@ function decorateUIWithErrors() {
                         </div>`;
     resultCard.innerHTML = DOMui;
 }
+
+
 function getUsers(username) {
-    console.log("function called: ", username);
+    // console.log("function called: ", username);
 
     try {
         return fetch(`https://api.github.com/users/${username}`).then(raw => {
             if (!raw.ok) {
-                console.log("api called with error");
+                // console.log("api called with error");
                 decorateUIWithErrors();
                 throw new Error("something broke!")
             }
@@ -80,10 +82,38 @@ function getUsers(username) {
 
     } catch (error) {
         decorateUIWithErrors();
-        console.error(error.message);
+        // console.error(error.message);
         throw error;
     }
 }
+
+
+
+function decorateRepoUI(repoData) {
+    
+    let repoList = '';
+    repoData.forEach(element => {
+        repoList += `<li>${element.name}</li>`
+    });
+
+    repoUL.innerHTML = repoList;
+}
+function getRepositories(username) {
+
+    try {
+        return fetch(`https://api.github.com/users/${username}/repos`).then(raw => {
+            if (!raw.ok) {
+                throw new Error("Something broke!!");
+            }
+            return raw.json();
+        });
+    } catch (error) {
+        console.error('Something went wrong');
+
+    }
+}
+
+
 
 searchBtn.addEventListener('click', function (event) {
     event.preventDefault();
@@ -92,10 +122,15 @@ searchBtn.addEventListener('click', function (event) {
 
     getUsers(username).then((data) => {
         decorateUI(data);
-        console.log(data);
+
+        getRepositories(username).then((data) => {
+            decorateRepoUI(data);
+            // console.log(data);
+        })
+        // console.log(data);
     }).catch((message) => {
         decorateUIWithErrors();
-        console.log(message);
+        // console.log(message);
     })
 })
 

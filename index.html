@@ -34,12 +34,6 @@
                         <p class="text-sm text-gray-400">Enter a username to locate the GitHub account</p>
                     </div>
                 </div>
-                <!-- <nav class="hidden md:flex gap-4 items-center text-sm text-gray-400">
-                    <a class="px-3 py-2 hover:text-gray-200" href="#">Docs</a>
-                    <a class="px-3 py-2 hover:text-gray-200" href="#">About</a>
-                    <a class="px-3 py-2 rounded-md bg-gradient-to-br from-indigo-600 to-pink-500 text-white shadow"
-                        href="#">New Project</a>
-                </nav> -->
             </header>
 
             <main class="glass rounded-2xl p-6 lg:p-10 shadow-2xl border border-gray-800">
@@ -63,29 +57,16 @@
                     </div>
                 </form>
 
-                <!-- Results area: your code should update the content inside #resultCard and toggle #emptyState as needed -->
                 <section id="results" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <div id="resultCard" class="hidden lg:block col-span-1 rounded-xl border border-gray-800 p-4 glass">
-                        
                     </div>
 
-                    <!-- <div id="emptyState"
+                    <div id="emptyState"
                         class="col-span-2 rounded-xl border border-dashed border-gray-800 p-6 flex flex-col justify-center items-start gap-4">
-                        <h3 class="text-xl font-semibold">No results yet</h3>
-                        <p class="text-gray-400">Type a username and press <strong>Search</strong> (or Enter). Your
-                            JavaScript should call the GitHub API and populate the card on success.</p>
-
-                        <details class="mt-4 text-sm text-gray-400">
-                            <summary class="cursor-pointer">Quick implementation notes</summary>
-                            <ul class="mt-2 list-disc list-inside text-gray-400">
-                                <li>Use <code>fetch('https://api.github.com/users/&lt;username&gt;')</code> to get
-                                    public profile data.</li>
-                                <li>Handle 404s (user not found) and rate limits gracefully.</li>
-                                <li>Update DOM elements: <code>#avatar</code>, <code>#displayName</code>,
-                                    <code>#handle</code>, etc.</li>
-                            </ul>
-                        </details>
-                    </div> -->
+                        <h3 class="text-xl font-semibold">Repositories:</h3>
+                        <ul id="repoUL" class="mt-2 list-disc list-inside text-gray-400">
+                        </ul>
+                    </div>
                 </section>
 
             </main>
